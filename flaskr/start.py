@@ -26,14 +26,17 @@ def upload():
     return jsonify({"msg": 1})
 
 
+'''
+前端传入 ??? 
+'''
 # 笔记 传入 （账号 current_page 页码 每一页文件数） 返回 （账号所拥有的笔记）
 @bp.route('/display', methods='GET')
 def display():
     username = request.args.get("username")
     page = request.args.get('page')
     number = request.args.get('number')
-    row_count = page * number  # appear_page
-    offset = (page - 1) * number  # ?? current_page
+    row_count = page * number  # appear_page 显示的条数
+    offset = (page - 1) * number  # ?? current_page 当前已显示的条数
 
     db = get_db()
     user_id = db.execute(
