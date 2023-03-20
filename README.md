@@ -74,7 +74,7 @@ SoundLine_backend:.
 
 ## 数据库
 
-设计 见schema.sql
+设计 见flaskr/schema.sql
 
 初始化
 
