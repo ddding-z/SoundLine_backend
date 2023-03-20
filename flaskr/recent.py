@@ -1,6 +1,6 @@
 """
 Recent：查看笔记
-Pending: display()
+Pending: 无
 """
 
 from flask import (
@@ -13,23 +13,23 @@ bp = Blueprint('recent', __name__, url_prefix='/recent')
 cors = CORS(bp)
 
 
-# 传入（账号 页码 每一页文件数） 返回 （账号所拥有的笔记）
-@bp.route('/display', methods='GET')
+# 传入（账号 current page 页码 每一页文件数） 返回 （账号所拥有的笔记）
+@bp.route('/display', methods=['GET', ])
 def display():
     username = request.args.get("username")
-    page = request.args.get('page')
+    # page = request.args.get('page')
     number = request.args.get('number')
-    row_count = page * number  # appear_page
-    offset = (page - 1) * number  # ?? current_page
+    offset = request.args.get('current_page')
 
     db = get_db()
-    user_id = db.execute(
+    user = db.execute(
         'SELECT id FROM user WHERE username = ?', (username,)
     ).fetchone()
-    docs = db.execute(
-        'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (username, offset)
-    ).fetchmany(row_count)
-    '''
-    返回 （账号所拥有的笔记）
-    '''
-    return jsonify({"msg": 1})
+    doc = db.execute(
+        'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (user['id'], offset)
+    ).fetchmany(number)
+
+    # docs [[id,author_id,folder_id,content,created],[],...]
+    docs = [list(item) for item in doc]
+
+    return jsonify({"msg": 1, "docs": docs})

@@ -1,3 +1,11 @@
+/*
+ Table:
+ user{id,username,password}
+ folder{id,author_id,foldername,created}
+ document{id,author_id,folder_id,content,created}
+ corpus{id,question,answer} answer待补充
+ */
+
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS folder;
 Drop TABLE IF EXISTS document;
@@ -12,7 +20,7 @@ CREATE TABLE user (
 CREATE TABLE folder (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author_id INTEGER NOT NULL,
-    name TEXT UNIQUE NOT NULL,
+    foldername TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES user (id)
 );
@@ -28,6 +36,7 @@ CREATE TABLE document (
   FOREIGN KEY (folder_id) REFERENCES folder (id)
 );
 
+-- chat对话语料 answer待补充
 CREATE TABLE corpus (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   question TEXT NOT NULL,

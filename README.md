@@ -49,6 +49,28 @@ def login():
 def login():
 	username = request.args.get("username")
 ```
+## 项目布局
+```
+SoundLine_backend:.
+│  .gitignore
+│  README.md
+│  requirements.txt
+├─.idea
+├─flaskr
+│  │  auth.py # 登录
+│  │  db.py # 数据库初始化
+│  │  document.py # 文档详情
+│  │  folder.py # 文件夹详情
+│  │  recent.py # recent界面
+│  │  schema.sql # 数据库定义
+│  │  start.py # start界面
+│  │  __init__.py # 应用初始化
+│  │  
+│  └─__pycache__
+│
+└─instance # sqlite数据库
+        flaskr.sqlite
+```      
 
 ## 数据库
 

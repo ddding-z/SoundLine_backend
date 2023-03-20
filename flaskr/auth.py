@@ -14,10 +14,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 cors = CORS(bp)
 
 
-@bp.route('/register', methods='POST')
+@bp.route('/register', methods=['POST', ])
 def register():
     username = request.json.get('username')
     password = request.json.get('password')
+    foldername = 'default'
     db = get_db()
 
     if not username:
@@ -33,11 +34,16 @@ def register():
         'INSERT INTO user (username, password) VALUES (?, ?)',
         (username, generate_password_hash(password))
     )
+    user = db.execute(
+        'SELECT * FROM user WHERE username = ?', (username,)
+    ).fetchone()
+    db.execute('INSERT INTO folder (author_id, foldername) VALUES (?, ?)', (user['id'], foldername))
     db.commit()
+
     return jsonify({"msg": 1})
 
 
-@bp.route('/login', methods='POST')
+@bp.route('/login', methods=['POST', ])
 def login():
     username = request.json.get('username')
     password = request.json.get('password')
