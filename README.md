@@ -1,4 +1,4 @@
-# soundline后端
+# Soundline后端
 
 ## 需求
 
@@ -28,8 +28,6 @@ Folders 传入（账号 页码 每一页文件夹数） 返回 （账号所拥�
 
 文件夹详情页面 传入 （账号 文件夹id） 返回 （文件夹所有包含的笔记 以及 信息）**GET**
 
-
-
 ```json
 response:{msg: 1,  username:'',....} // 1--成功 0--失败
 ```
@@ -44,8 +42,6 @@ def login():
 	username = request.json.get("username")
 ```
 
-
-
 ### GET
 
 ```python
@@ -54,16 +50,36 @@ def login():
 	username = request.args.get("username")
 ```
 
+## 数据库
 
+设计 见schema.sql
 
+初始化
 
+```shell
+$ flask init-db
+```
 
-## 数据库设计
+## 运行
 
-学校云平台 数据库
+```cmd
+# cmd
+> set FLASK_APP=flaskr
+> set FLASK_ENV=development
+> flask run
 
-User { username, password, token(?), file : [{id,name,content}, {}, {}, {}] }
+#powershell
+> $env:FLASK_APP = "flaskr"
+> $env:FLASK_ENV = "development"
+> flask run
 
-Folder { id, user_id, name, create_time, files : [ {id,name}, {id}, {} ] }
+# 可以将看到类似的输出：
+* Serving Flask app "flaskr"
+* Environment: development
+* Debug mode: on
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+* Restarting with stat
+* Debugger is active!
+* Debugger PIN: 855-212-761
+```
 
-## 后端功能

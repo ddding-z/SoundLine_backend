@@ -1,5 +1,6 @@
 """
 文件夹：查看文件夹
+Pending: display()
 """
 
 from flask import (
@@ -28,5 +29,7 @@ def display():
     folders = db.execute(
         'SELECT * FROM folder WHERE author_id = ? OFFSET ? ', (username, offset)
     ).fetchmany(row_count)
-    # ...
+    '''
+    返回 （账号所拥有的文件夹）
+    '''
     return jsonify({"msg": 1})

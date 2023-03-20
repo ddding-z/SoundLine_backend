@@ -1,5 +1,6 @@
 """
 Recent：查看笔记
+Pending: display()
 """
 
 from flask import (
@@ -28,5 +29,7 @@ def display():
     docs = db.execute(
         'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (username, offset)
     ).fetchmany(row_count)
-    # ...
+    '''
+    返回 （账号所拥有的笔记）
+    '''
     return jsonify({"msg": 1})

@@ -1,5 +1,6 @@
 """
 Auth：登录、注册
+Pending: 无
 """
 
 from flask import (
@@ -13,47 +14,45 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 cors = CORS(bp)
 
 
-@bp.route('/register', methods=('GET', 'POST'))
+@bp.route('/register', methods='POST')
 def register():
-    if request.method == 'POST':
-        username = request.json.get('username')
-        password = request.json.get('password')
-        db = get_db()
+    username = request.json.get('username')
+    password = request.json.get('password')
+    db = get_db()
 
-        if not username:
-            return jsonify({"msg": 0})
-        elif not password:
-            return jsonify({"msg": 0})
-        elif db.execute(
-                'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
-            return jsonify({"msg": 0})
+    if not username:
+        return jsonify({"msg": 0})
+    elif not password:
+        return jsonify({"msg": 0})
+    elif db.execute(
+            'SELECT id FROM user WHERE username = ?', (username,)
+    ).fetchone() is not None:
+        return jsonify({"msg": 0})
 
-        db.execute(
-            'INSERT INTO user (username, password) VALUES (?, ?)',
-            (username, generate_password_hash(password))
-        )
-        db.commit()
-        return jsonify({"msg": 1})
+    db.execute(
+        'INSERT INTO user (username, password) VALUES (?, ?)',
+        (username, generate_password_hash(password))
+    )
+    db.commit()
+    return jsonify({"msg": 1})
 
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods='POST')
 def login():
-    if request.method == 'POST':
-        username = request.json.get('username')
-        password = request.json.get('password')
-        db = get_db()
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+    username = request.json.get('username')
+    password = request.json.get('password')
+    db = get_db()
+    user = db.execute(
+        'SELECT * FROM user WHERE username = ?', (username,)
+    ).fetchone()
 
-        if user is None:
-            return jsonify({"msg": 0})
-        elif not check_password_hash(user['password'], password):
-            return jsonify({"msg": 0})
+    if user is None:
+        return jsonify({"msg": 0})
+    elif not check_password_hash(user['password'], password):
+        return jsonify({"msg": 0})
 
-        session.clear()
-        session['user_id'] = user['id']
-        return jsonify({"msg": 1, "username": username})
+    session.clear()
+    session['user_id'] = user['id']
+    return jsonify({"msg": 1, "username": username})
 
 

@@ -1,5 +1,6 @@
 """
 Start：新建笔记、上传音频、查看用户笔记、文件夹
+Pending: create(),upload(),display()
 """
 import random
 import markdown
@@ -13,19 +14,19 @@ bp = Blueprint('start', __name__, url_prefix='/start')
 cors = CORS(bp)
 
 
-# 新建笔记
-@bp.route('/create', methods=('GET', 'POST'))
+# 新建笔记 跳转至文件详情页面??
+@bp.route('/create', methods='GET')
 def create():
     return jsonify({"msg": 1})
 
 
-# 上传音频并新建笔记
-@bp.route('/upload', methods=('GET', 'POST'))
+# 上传音频、并新建笔记
+@bp.route('/upload', methods='GET')
 def upload():
     return jsonify({"msg": 1})
 
 
-# 笔记 传入 （账号 页码 每一页文件数） 返回 （账号所拥有的笔记）
+# 笔记 传入 （账号 current_page 页码 每一页文件数） 返回 （账号所拥有的笔记）
 @bp.route('/display', methods='GET')
 def display():
     username = request.args.get("username")
@@ -39,9 +40,11 @@ def display():
         'SELECT id FROM user WHERE username = ?', (username,)
     ).fetchone()
     docs = db.execute(
-        'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (username, offset)
+        'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (user_id, offset)
     ).fetchmany(row_count)
-    # ...
+    '''
+    ToDo: 返回 （账号所拥有的笔记）
+    '''
     return jsonify({"msg": 1})
 
 

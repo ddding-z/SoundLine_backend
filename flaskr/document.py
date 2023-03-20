@@ -1,5 +1,6 @@
 """
 文件详情页面：查看、修改、新建文件； chat
+Pending: display(),create(),revise(),unfold()
 """
 
 import markdown
@@ -22,12 +23,43 @@ def display():
 # 新建 传入 （账号 文件内容） 返回 （状态）
 @bp.route('/create', methods='POST')
 def create():
+    username = request.json.get("username")
+    content = request.json.get("content")
+
+    db = get_db()
+    user_id = db.execute(
+        'SELECT id FROM user WHERE username = ?', (username,)
+    ).fetchone()
+    db.execute('INSERT INTO document (author_id, folder_id, content) VALUES (?, ?, ?)',
+               (user_id, 'default', content))
+    db.commit()
+
+    return jsonify({"msg": 1})
+
+
+# 传入 （账号 文件id 文件内容） 返回 （状态）
+@bp.route('/revise', methods='PUT')
+def revise():
     return jsonify({"msg": 1})
 
 
 # 文件夹详情页面 传入 （账号 文件夹id） 返回 （文件夹所有包含的笔记 以及 信息）
 @bp.route('/unfold', methods='GET')
 def unfold():
+    username = request.args.get("username")
+    folder_id = request.args.get("folder_id")
+
+    db = get_db()
+    user_id = db.execute(
+        'SELECT id FROM user WHERE username = ?', (username,)
+    ).fetchone()
+    docs = db.execute(
+        'SELECT * FROM document WHERE author_id = ? and folder_id = ?', (user_id, folder_id)
+    ).fetchall()
+    '''
+    ToDo: 返回文件夹所有包含的笔记以及信息
+    '''
+
     return jsonify({"msg": 1})
 
 
