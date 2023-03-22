@@ -1,11 +1,11 @@
 """
 调用 chatgpt api
-需要修改代理port
+需要修改代理port、api_key
 """
 import requests
 
 def chatUtil(prompt):
-    api_key = "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"
+    api_key = "padding"
     model = "text-davinci-002"
     # 修改代理port
     proxies = {'http': 'http://127.0.0.1:7080', 'https': 'https://127.0.0.1:7080'}
