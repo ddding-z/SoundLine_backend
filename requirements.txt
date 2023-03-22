@@ -2,3 +2,4 @@ click
 flask
 werkzeug
 markdown
+requests
