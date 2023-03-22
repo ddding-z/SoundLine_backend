@@ -4,11 +4,11 @@ Pending: 无
 """
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, request, jsonify
 )
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flaskr.db import get_db
-
+from flaskr.chatUtil import *
 bp = Blueprint('document', __name__, url_prefix='/document')
 cors = CORS(bp)
 
@@ -83,15 +83,14 @@ def unfold():
     return jsonify({"docs": docs})
 
 
-# 文件详情页面chat 传入 （账号 问题内容） 返回 （问题对应答案）答案尚未定义
-@bp.route('/chat', methods=['POST', ])
+# 文件详情页面chat 传入 （账号 问题内容） 返回 （问题对应答案）
+@bp.route('/chat', methods=['GET', 'POST'])
 def chat():
     username = request.json.get("username")
     question = request.json.get("question")
-
-    db = get_db()
-    text = db.execute(
-        'SELECT * FROM corpus WHERE qusetion = ?', (question,)
-    ).fetchone()
-
-    return jsonify({"answer": text['answer']})
+    # content 存放文章
+    content = "padding"
+    prompt = "根据文章内容，回答如下问题：" + question + "文章内容如下：" + content
+    answer = chatUtil(prompt)
+    # print(answer)
+    return jsonify({"answer": answer})
