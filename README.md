@@ -58,6 +58,7 @@ SoundLine_backend:.
 ├─.idea
 ├─flaskr
 │  │  auth.py # 登录
+│  │  chatUtil.py # 调用chatpgtAPI
 │  │  db.py # 数据库初始化
 │  │  document.py # 文档详情
 │  │  folder.py # 文件夹详情
