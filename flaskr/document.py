@@ -1,7 +1,6 @@
 """
-文件详情页面：查看、修改、新建文件； chat
-Pending: 无
-revise: chat需要传入文件id
+文件详情页面：查看（展示文件具体内容和summary）、修改、新建文件，, chat
+Pending: chat需要传入文件id, 查看返回的信息新增summary
 """
 
 from flask import (
@@ -15,7 +14,7 @@ bp = Blueprint('document', __name__, url_prefix='/document')
 cors = CORS(bp)
 
 
-# 传入 （账号 文件id） 返回 （文件具体内容和信息）
+# 传入 （账号 文件id） 返回 （文件具体内容和summary）
 @bp.route('/display', methods=['GET', ])
 def display():
     username = request.json.get("username")
@@ -25,9 +24,12 @@ def display():
     doc = db.execute(
         'SELECT * FROM document WHERE id = ?', (doc_id,)
     ).fetchone()
+    summary = db.execute(
+        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
+    ).fetchall()
 
     # list(doc) [id,author_id,folder_id,content,created]
-    return jsonify({"docs": list(doc)})
+    return jsonify({"docs": list(doc), "summary": summary['content']})
 
 
 # 新建 传入 （账号 文件内容） 返回 （状态）
