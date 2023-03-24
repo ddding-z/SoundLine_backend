@@ -4,6 +4,7 @@
 """
 import requests
 
+
 def chatUtil(prompt):
     api_key = "padding"
     model = "text-davinci-002"

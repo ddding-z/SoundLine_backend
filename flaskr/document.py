@@ -1,6 +1,7 @@
 """
 文件详情页面：查看、修改、新建文件； chat
 Pending: 无
+revise: chat需要传入文件id
 """
 
 from flask import (
@@ -9,6 +10,7 @@ from flask import (
 from flask_cors import CORS
 from flaskr.db import get_db
 from flaskr.chatUtil import *
+
 bp = Blueprint('document', __name__, url_prefix='/document')
 cors = CORS(bp)
 
@@ -21,7 +23,7 @@ def display():
 
     db = get_db()
     doc = db.execute(
-        'SELECT * FROM document WHERE id = ?', (doc_id, )
+        'SELECT * FROM document WHERE id = ?', (doc_id,)
     ).fetchone()
 
     # list(doc) [id,author_id,folder_id,content,created]
@@ -83,14 +85,19 @@ def unfold():
     return jsonify({"docs": docs})
 
 
-# 文件详情页面chat 传入 （账号 问题内容） 返回 （问题对应答案）
+# 文件详情页面chat 传入 （账号 文件id, 问题内容） 返回 （问题对应答案）
 @bp.route('/chat', methods=['GET', 'POST'])
 def chat():
     username = request.json.get("username")
     question = request.json.get("question")
-    # content 存放文章
-    content = "padding"
-    prompt = "根据文章内容，回答如下问题：" + question + "文章内容如下：" + content
+    doc_id = request.json.get("doc_id")
+
+    db = get_db()
+    summary = db.execute(
+        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
+    ).fetchall()
+
+    prompt = "According to the passage below, answer my question : " + question + ", the passage is here," + \
+             summary['content']
     answer = chatUtil(prompt)
-    # print(answer)
     return jsonify({"answer": answer})
