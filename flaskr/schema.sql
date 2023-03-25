@@ -37,55 +37,16 @@ CREATE TABLE document (
   FOREIGN KEY (folder_id) REFERENCES folder (id)
 );
 
--- chat对话语料 answer待补充
-CREATE TABLE corpus (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  question TEXT NOT NULL,
-  answer TEXT NOT NULL
-);
+/*
+  插入测试数据
+  username:root, password:12345,user_id:1, folder_id:1, doc_id:1
+ */
+INSERT INTO user (username, password) VALUES ('root', '12345');
 
--- 存放用于展示的summary
-CREATE TABLE summary (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  doc_id INTEGER NOT NULL,
-  content TEXT NOT NULL,
-  FOREIGN KEY (doc_id) REFERENCES document (id)
-);
+INSERT INTO folder(author_id, foldername) VALUES ('1' , 'default');
 
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'论文试图解决什么问题','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'这是否是一个新的问题','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'这篇文章要验证一个什么科学假设','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'有哪些相关研究？如何归类？谁是这一类课题在领域内值得关注的研究员？','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'论文中提到的解决方案之关键是什么？','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'论文中的实验是如何设计的？','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'用于定量评估的数据集是什么？代码有没有开源？','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'论文中的实验及结果有没有很好地支持需要验证地科学假设？','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'这篇论文到底有什么贡献','padding');
-
-INSERT INTO corpus (ID,question,answer)
-VALUES (null,'下一步呢？有什么工作可以继续深入？','padding');
-
--- 插入 summary
-INSERT INTO summary (ID,content)
-VALUES (null,'This was the meeting of the CVPR 2022 conference. The meeting began with the introduction and introduction of the participants. Then, the participants gave a brief introduction to the conference and the agenda for the next meeting. After that, the meeting moved on to the discussion about the future of the conference. Then the participants talked about the current state of the project and the future plans of the event.
+INSERT INTO document (author_id, folder_id, content)
+VALUES (1, 1, 'This was the meeting of the CVPR 2022 conference. The meeting began with the introduction and introduction of the participants. Then, the participants gave a brief introduction to the conference and the agenda for the next meeting. After that, the meeting moved on to the discussion about the future of the conference. Then the participants talked about the current state of the project and the future plans of the event.
 
 The meeting began with a brief introduction to the current situation of the project. The team was working on a new model for the recognition of human faces, and they were trying to find out how they could improve it. The meeting then moved onto a discussion about the current state of the team and the current challenges they were facing. After that, the team talked about the progress of the current project and the future directions they were going to take it.
 
@@ -107,3 +68,54 @@ The meeting began with a brief introduction to the current situation of the proj
 
  This meeting was about the progress of the team''s work on learning to solve hard minimal problems in computer vision. The team was working with Tim Duff, Anton Lakin, and Thomas Piedler on the project. They were trying to solve the problem of how to reconstruct 3D world from many images. The main problem is that all 272 solutions have to be processed, and only one solution is really meaningful. After that, the team was able to build an intermediate system which is close to the starting system.  The meeting began with a brief introduction to the team''s current project. The team was trying to train a neural network classifier for a new type of image recognition task. They used a combination of machine learning with optimized homotopic continuation to get a fast solver for relative pose between three calibrated cameras from four points in three views. After that, the team discussed how they could improve the performance of their model. The meeting ended with a discussion about the future of the project and future directions for the team.  The meeting began with a presentation on the current status of the project. The team was working on a new method to solve the problems they were facing. The meeting ended with the presentation of the results of the current project and the discussion of future directions.'
  );
+
+
+--
+-- -- 存放用于展示的summary
+-- CREATE TABLE summary (
+--   id INTEGER PRIMARY KEY AUTOINCREMENT,
+--   doc_id INTEGER NOT NULL,
+--   content TEXT NOT NULL,
+--   FOREIGN KEY (doc_id) REFERENCES document (id)
+-- );
+
+
+-- chat对话语料 answer待补充
+-- CREATE TABLE corpus (
+--   id INTEGER PRIMARY KEY AUTOINCREMENT,
+--   question TEXT NOT NULL,
+--   answer TEXT NOT NULL
+-- );
+
+
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'论文试图解决什么问题','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'这是否是一个新的问题','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'这篇文章要验证一个什么科学假设','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'有哪些相关研究？如何归类？谁是这一类课题在领域内值得关注的研究员？','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'论文中提到的解决方案之关键是什么？','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'论文中的实验是如何设计的？','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'用于定量评估的数据集是什么？代码有没有开源？','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'论文中的实验及结果有没有很好地支持需要验证地科学假设？','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'这篇论文到底有什么贡献','padding');
+--
+-- INSERT INTO corpus (ID,question,answer)
+-- VALUES (null,'下一步呢？有什么工作可以继续深入？','padding');
+
+

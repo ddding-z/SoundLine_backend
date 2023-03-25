@@ -9,7 +9,7 @@ def chatUtil(prompt):
     api_key = "padding"
     model = "text-davinci-002"
     # 修改代理port
-    proxies = {'http': 'http://127.0.0.1:7080', 'https': 'https://127.0.0.1:7080'}
+    proxies = {'http': 'http://127.0.0.1:5080', 'https': 'https://127.0.0.1:5080'}
     url = f"https://api.openai.com/v1/engines/{model}/completions"
 
     response = requests.post(
@@ -34,4 +34,5 @@ if __name__ == '__main__':
              "Zhang），来咨询一些关于离职的事项。你要搞清楚的事情有两件：1.入职协议上规定想要获得实习证明，员工的实际实习天数必须达到实习期的90%，那么这90%是如何计算的？2" \
              ".离职手续必须在实习期结束当天办理吗，可否晚几天办理？ "
     answer = chatUtil(prompt)
+    print(answer)
 #

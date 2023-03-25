@@ -1,6 +1,8 @@
 """
 文件详情页面：查看（展示文件具体内容和summary）、修改、新建文件，, chat
-Pending: chat需要传入文件id, 查看返回的信息新增summary
+Pending:
+revise: display(),chat()
+
 """
 
 from flask import (
@@ -14,7 +16,7 @@ bp = Blueprint('document', __name__, url_prefix='/document')
 cors = CORS(bp)
 
 
-# 传入 （账号 文件id） 返回 （文件具体内容和summary）
+# 传入 （账号 文件id） 返回 （文件具体内容）
 @bp.route('/display', methods=['GET', ])
 def display():
     username = request.json.get("username")
@@ -24,12 +26,8 @@ def display():
     doc = db.execute(
         'SELECT * FROM document WHERE id = ?', (doc_id,)
     ).fetchone()
-    summary = db.execute(
-        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
-    ).fetchall()
-
     # list(doc) [id,author_id,folder_id,content,created]
-    return jsonify({"docs": list(doc), "summary": summary['content']})
+    return jsonify({"docs": list(doc)})
 
 
 # 新建 传入 （账号 文件内容） 返回 （状态）
@@ -87,19 +85,19 @@ def unfold():
     return jsonify({"docs": docs})
 
 
-# 文件详情页面chat 传入 （账号 文件id, 问题内容） 返回 （问题对应答案）
+# 文件详情页面chat 传入 （账号, 问题内容） 返回 （问题对应答案）
 @bp.route('/chat', methods=['GET', 'POST'])
 def chat():
     username = request.json.get("username")
     question = request.json.get("question")
-    doc_id = request.json.get("doc_id")
+    # doc_id = request.json.get("doc_id")
 
     db = get_db()
-    summary = db.execute(
-        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
+    document = db.execute(
+        'SELECT * FROM document WHERE id = ?', (1,)
     ).fetchall()
 
-    prompt = "According to the passage below, answer my question : " + question + ", the passage is here," + \
-             summary['content']
+    prompt = "According to the passage below, answer my question: " + question + ", the passage is here: " + \
+             document['content']
     answer = chatUtil(prompt)
     return jsonify({"answer": answer})
