@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS folder;
 Drop TABLE IF EXISTS document;
 Drop TABLE IF EXISTS corpus;
+Drop TABLE IF EXISTS summary;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +48,7 @@ CREATE TABLE corpus (
 -- 存放用于展示的summary
 CREATE TABLE summary (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  doc_id INTEGER NOT NULL,
+  doc_id INTEGER,
   content TEXT NOT NULL,
   FOREIGN KEY (doc_id) REFERENCES document (id)
 );

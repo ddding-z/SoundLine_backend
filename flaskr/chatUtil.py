@@ -6,7 +6,7 @@ import requests
 
 
 def chatUtil(prompt):
-    api_key = "padding"
+    api_key = "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"
     model = "text-davinci-002"
     # 修改代理port
     proxies = {'http': 'http://127.0.0.1:7080', 'https': 'https://127.0.0.1:7080'}

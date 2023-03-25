@@ -17,19 +17,23 @@ cors = CORS(bp)
 # 传入 （账号 文件id） 返回 （文件具体内容和summary）
 @bp.route('/display', methods=['GET', ])
 def display():
-    username = request.json.get("username")
-    doc_id = request.json.get("file_id")
+    username = request.args.get("username")
+    doc_id = request.args.get("file_id")
 
     db = get_db()
     doc = db.execute(
         'SELECT * FROM document WHERE id = ?', (doc_id,)
     ).fetchone()
+    # summary = db.execute(
+    #     'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
+    # ).fetchall()
     summary = db.execute(
-        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
-    ).fetchall()
+        'SELECT * FROM summary'
+    ).fetchone()
 
     # list(doc) [id,author_id,folder_id,content,created]
-    return jsonify({"docs": list(doc), "summary": summary['content']})
+    return jsonify({"recent": list(doc), "summary": summary['content'], 'msg':1})
+    # return jsonify({"recent": list(doc), 'msg':1})
 
 
 # 新建 传入 （账号 文件内容） 返回 （状态）
@@ -48,9 +52,11 @@ def create():
     ).fetchone()
     db.execute('INSERT INTO document (author_id, folder_id, content) VALUES (?, ?, ?)',
                (user['id'], folder['id'], content))
+    id_ = db.execute('select max(id) from document;').fetchone()
+    print(id_[0])
     db.commit()
 
-    return jsonify({"msg": 1})
+    return jsonify({"msg": 1, 'id':id_[0]})
 
 
 # 传入 （账号 文件id 文件内容） 返回 （状态）
@@ -59,6 +65,7 @@ def revise():
     username = request.json.get("username")
     doc_id = request.json.get("file_id")
     content = request.json.get("content")
+    print(doc_id)
 
     db = get_db()
     db.execute('UPDATE document set content = ? where id = ?', (content, doc_id))
@@ -84,7 +91,7 @@ def unfold():
     # docs [[id,author_id,folder_id,content,created],[],...]
     docs = [list(item) for item in doc]
 
-    return jsonify({"docs": docs})
+    return jsonify({"docs": docs, 'msg':1})
 
 
 # 文件详情页面chat 传入 （账号 文件id, 问题内容） 返回 （问题对应答案）
@@ -95,11 +102,15 @@ def chat():
     doc_id = request.json.get("doc_id")
 
     db = get_db()
+    # summary = db.execute(
+    #     'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
+    # ).fetchall()
+
     summary = db.execute(
-        'SELECT * FROM summary WHERE doc_id = ?', (doc_id,)
-    ).fetchall()
+        'SELECT * FROM summary'
+    ).fetchone()
 
     prompt = "According to the passage below, answer my question : " + question + ", the passage is here," + \
              summary['content']
     answer = chatUtil(prompt)
-    return jsonify({"answer": answer})
+    return jsonify({"answer": answer, 'msg':1})

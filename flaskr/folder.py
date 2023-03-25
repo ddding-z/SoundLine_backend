@@ -26,10 +26,11 @@ def display():
         'SELECT * FROM user WHERE username = ?', (username,)
     ).fetchone()
     folder = db.execute(
-        'SELECT * FROM folder WHERE author_id = ? OFFSET ? ', (user['id'], offset)
-    ).fetchmany(number)
+        'SELECT * FROM folder WHERE author_id = ? limit ? offset ? ', (str(user['id']),int(number),\
+                                                                             (int(offset)-1)*int(number) )
+    ).fetchmany()
 
     # folders [[id,author_id,foldername,created],[],...]
     folders = [list(item) for item in folder]
 
-    return jsonify({"folders": folders})
+    return jsonify({"folder": folders, 'msg':1})

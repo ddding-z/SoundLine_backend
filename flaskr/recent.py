@@ -26,10 +26,11 @@ def display():
         'SELECT id FROM user WHERE username = ?', (username,)
     ).fetchone()
     doc = db.execute(
-        'SELECT * FROM document WHERE author_id = ? OFFSET ? ', (user['id'], offset)
-    ).fetchmany(number)
+        'SELECT * FROM document WHERE author_id = ? limit ? offset ? ', (str(user['id']),int(number),\
+                                                                             (int(offset)-1)*int(number) )
+    ).fetchall()
 
     # docs [[id,author_id,folder_id,content,created],[],...]
     docs = [list(item) for item in doc]
 
-    return jsonify({"msg": 1, "docs": docs})
+    return jsonify({"msg": 1, "recent": docs})
