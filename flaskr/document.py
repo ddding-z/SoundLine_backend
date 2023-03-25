@@ -91,7 +91,7 @@ def unfold():
     # docs [[id,author_id,folder_id,content,created],[],...]
     docs = [list(item) for item in doc]
 
-    return jsonify({"docs": docs, 'msg':1})
+    return jsonify({"docs": docs,'msg':1})
 
 
 # 文件详情页面chat 传入 （账号 文件id, 问题内容） 返回 （问题对应答案）
